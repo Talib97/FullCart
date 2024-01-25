@@ -1,0 +1,75 @@
+<p-toast></p-toast>
+<div class="grid">
+  <div class="col-12 md:col-2 lg:col-2 xl:col-2">
+
+    <div class="fixed listbox">
+      <h4>Filter by category</h4>
+
+      <ng-container *ngIf="(categories$ | async) as categories;else loading">
+        <p-listbox [options]="categories"
+                   (onChange)="onCategoryChange($event)"
+                   optionLabel="name"
+                   [listStyle]="{'max-height': '220px'}">
+        </p-listbox>
+      </ng-container>
+
+      <ng-template #loading>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+      </ng-template>
+    </div>
+
+  </div>
+  <div class="col-12 md:col-10 lg:col-10 xl:col-10">
+    <p-dataView #dv [value]="inventoryProduct" layout="grid">
+      <ng-template pTemplate="header">
+        <div class="flex flex-column md:flex-row md:justify-content-between align-items-center gap-3">
+          <label>Sort by price</label>
+          <p-dropdown [options]="sortOptions" placeholder="Sort By Price" (onChange)="onSortChange($event)" [autoDisplayFirst]="false" [showClear]="true" styleClass="mb-2 md:mb-0"></p-dropdown>
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" [formControl]="searchControl" placeholder="Search Item" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template let-product pTemplate="gridItem">
+        <div class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+          <div class="p-4 border-1 surface-border surface-card border-round">
+            <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+              <span class="flex align-items-center gap-2">
+                <i class="pi pi-tag"></i>
+                <span class="font-semibold">{{ product.category?.name }}</span>
+              </span>
+              <p-tag [value]="product.status?.description" [severity]="getSeverity(product)"></p-tag>
+            </div>
+            <div class="flex flex-column align-items-center gap-2 py-2">
+
+              <img *ngIf="product.image && product.image.includes('https') ;else imageName" width="50" [src]="product.image" [alt]="product.image" class="w-8 shadow-2 border-round" />
+              <ng-template #imageName>
+                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="w-8 shadow-2 border-round" />
+              </ng-template>
+
+
+              <!--<img class="w-8 shadow-2 border-round" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" />-->
+              <div class="text-sm font-bold">{{ product.name }}</div>
+              <div class="p-2 overflow-hidden text-overflow-ellipsis">
+                {{product?.description}}
+              </div>
+            </div>
+            <div class="flex align-items-center justify-content-between">
+              <span class="text-2xl font-semibold">{{ '$' + product.price }}</span>
+              <button pButton pRipple [label]="product.loadingStatus? 'Adding...':'Add to cart'" class="p-button-rounded" [loading]="product.loadingStatus" (click)="addItemToCart(product)" [disabled]="product.status?.description === 'OUTOFSTOCK'"></button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-dataView>
+
+  </div>
+
+</div>
+
+

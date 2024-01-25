@@ -1,0 +1,14 @@
+<p-menubar [model]="getMenuItem(items)" styleClass="sticky top-0 z-5">
+  <ng-template pTemplate="start">
+    <img src="./assets/images/fullcart.svg" height="40" class="mr-2 ml-4 cursor-pointer" [routerLink]="['/product']" />
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div class="flex gap-5 align-item-center">
+      <i class="pi pi-shopping-cart cursor-pointer" pBadge style="font-size: 1.9rem" [value]="cartCount" [routerLink]="['/cart']"></i>
+      <p-chip>
+        <p-avatar [label]="user.name | initials" styleClass="mr-2" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }" shape="circle"></p-avatar>
+        <label>{{user.name}}</label>
+      </p-chip>
+    </div>
+  </ng-template>
+</p-menubar>

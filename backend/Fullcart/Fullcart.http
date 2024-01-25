@@ -1,0 +1,6 @@
+@Fullcart_HostAddress = http://localhost:5048
+
+GET {{Fullcart_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

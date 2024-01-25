@@ -1,0 +1,53 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card">
+  <p-dataView #dv [value]="cart">
+    <ng-template pTemplate="header">
+      <div class="flex flex-column md:flex-row md:justify-content-end align-items-center">
+        <p-button label="Place Order" severity="success" styleClass="mr-6" (onClick)="showAddressForm=true"></p-button>
+        <label>Total Cart Amount : {{'$'+ calculateTotalCartAmpunt()}}</label>
+      </div>
+    </ng-template>
+    <ng-template let-cartItem pTemplate="listItem">
+      <div class="col-12">
+        <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4">
+          <!--<img class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + cartItem?.image" [alt]="cartItem?.name" />-->
+
+          <img *ngIf="cartItem.image && cartItem.image.includes('https') ;else imageName" width="50" [src]="cartItem.image" [alt]="cartItem.name" class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" />
+          <ng-template #imageName>
+            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + cartItem.image" [alt]="cartItem.name" class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round" />
+          </ng-template>
+
+
+          <div class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+              <div class="text-2xl font-bold text-900">{{ cartItem?.name }}</div>
+              <p>{{ cartItem?.description }}</p>
+
+              <p-dropdown [options]="maxOrderQuantity" [(ngModel)]="cartItem.addedQty" styleClass="w-full" (onChange)="onChangeItemQty($event,cartItem)"></p-dropdown>
+              <div class="flex align-items-center gap-3">
+                <span class="flex align-items-center gap-2">
+                  <label>Price:</label>
+                  <span class="font-semibold">{{'$'+ cartItem?.unitPrice }}</span>
+                </span>
+              </div>
+            </div>
+            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+              <small>Item quantity : {{cartItem?.addedQty}} </small>
+              <span class="text-2xl font-semibold">Total Price : {{'$'+ cartItem.totalItemPrice}}</span>
+              <p-button [label]="cartItem.loadingStatus ? 'Removing...':'Remove'" [outlined]="true" severity="danger" [loading]="cartItem.loadingStatus" (onClick)="onRemoveConfirmation(cartItem)"></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+</div>
+
+<p-dialog header="Enter Shipping Address" [(visible)]="showAddressForm" [modal]="true">
+  <textarea rows="5" cols="30" pInputTextarea [maxLength]="100" [formControl]="shippingAddressControl"></textarea>
+  <ng-template pTemplate="footer">
+    <p-button [label]="placeOrderBtnLoader ? 'Creating...':'Create Order'" severity="success" [loading]="placeOrderBtnLoader" [disabled]="shippingAddressControl.invalid" (onClick)="createOrder()"></p-button>
+  </ng-template>
+</p-dialog>

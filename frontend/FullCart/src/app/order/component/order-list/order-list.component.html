@@ -1,0 +1,54 @@
+<p-toast></p-toast>
+<div class="card">
+  <p-table [value]="orders" dataKey="orderId" [tableStyle]="{ 'min-width': '60rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 5rem"></th>
+        <th>Order Id#</th>
+        <th>Status</th>
+        <th>Created Date</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order let-expanded="expanded">
+      <tr>
+        <td>
+          <button type="button" pButton pRipple [pRowToggler]="order" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+        </td>
+        <td><b class="text-blue">{{ order.orderId }}</b></td>
+        <td><p-tag [severity]="order.orderStatus === 'CREATED'?'success':'danger'" [value]="order.orderStatus"></p-tag></td>
+        <td>{{ order.orderedDate | date : 'EEEE, MMMM d, y' }}</td>
+        <td><p-button label="Cancel" [outlined]="true" severity="danger" *ngIf="order.orderStatus !== 'CANCELLED'" (onClick)="onCancelOrder(order)"></p-button></td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-order>
+      <tr>
+        <td colspan="7">
+          <div class="p-3">
+            <p-table [value]="order.orderDetail" dataKey="id">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Ordered Quantity</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-orderDetail>
+                <tr>
+                  <td><b class="text-xl">{{ orderDetail.name }}</b></td>
+                  <td><img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + orderDetail.image" [alt]="orderDetail.name" width="150" height="100" class="shadow-4" /></td>
+                  <td><b class="text-xl">{{ orderDetail.orderedQty }}</b></td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="6">There are no orders yet.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

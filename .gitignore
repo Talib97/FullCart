@@ -1,0 +1,18 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/backend/.vs
+/backend/Fullcart/.vs
+/backend/Fullcart/bin/Debug/net8.0
+/backend/Fullcart/obj
+/backend/FullCart.Application/bin/Debug/net8.0
+/backend/FullCart.Application/obj
+/backend/FullCart.Domain/bin/Debug/net8.0
+/backend/FullCart.Domain/obj
+/backend/FullCart.Infrastructure/bin/Debug/net8.0
+/backend/FullCart.Infrastructure/obj
+/frontend/FullCart/.vs
+/frontend/FullCart/.vscode
+node_modules
